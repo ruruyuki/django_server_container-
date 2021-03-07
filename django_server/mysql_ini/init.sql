@@ -1,0 +1,3 @@
+GRANT ALL PRIVILEGES ON FYblogdb.* TO 'user'@'%';
+
+FLUSH PRIVILEGES;

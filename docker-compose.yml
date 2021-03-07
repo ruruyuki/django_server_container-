@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  WebServer-django:
+      image: nginx
+      container_name: 'WebServer-django'
+      volumes:
+        - ./django_server/nginx/nginx.conf:/etc/nginx/nginx.conf
+        - ./django_server/nginx/uwsgi_params:/etc/nginx/uwsgi_params
+      ports:
+        - 80:80
+      depends_on:
+        - python
+
+  python:
+      build: ./django_server/django
+      container_name: 'WebAPServer-django'
+      command: uwsgi --socket :8001 --module mysite.wsgi --py-autoreload 1 --logto /tmp/uwsgi.log
+      volumes:
+        - ./django_server/django/src:/code
+        - ./django_server/django/log:/tmp
+      expose:
+        - "8001"
+      depends_on:
+        - DBServer-django
+
+  DBServer-django:
+      image: mysql:5.7
+      container_name: 'DBServer-django'
+      command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      ports:
+        - "3306:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: djangodb
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+        TZ: 'Asia/Tokyo'
+      volumes:
+        - ./django_server/mysql/lib:/var/lib/mysql
+        - ./django_server/mysql/etc:/etc/mysql
+        - ./django_server/mysql_ini:/docker-entrypoint-initdb.d
