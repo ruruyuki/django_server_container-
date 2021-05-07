@@ -15,7 +15,7 @@ services:
   python:
       build: ./django_server/django
       container_name: 'WebAPServer-django'
-      command: uwsgi --socket :8001 --module mysite.wsgi --py-autoreload 1 --logto /tmp/uwsgi.log
+      command: uwsgi --socket :8001 --module project.wsgi --py-autoreload 1 --logto /tmp/uwsgi.log
       volumes:
         - ./django_server/django/src:/code
         - ./django_server/django/log:/tmp
