@@ -40,3 +40,4 @@ services:
         - ./django_server/mysql/lib:/var/lib/mysql
         - ./django_server/mysql/etc:/etc/mysql
         - ./django_server/mysql_ini:/docker-entrypoint-initdb.d
+
